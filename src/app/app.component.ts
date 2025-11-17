@@ -1,11 +1,12 @@
 
 import { Component } from '@angular/core';
 import { GeneratorComponent } from './features/generator/generator.component';
+import { AuthComponent } from './features/auth/auth.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [GeneratorComponent],
+  imports: [GeneratorComponent, AuthComponent],
   template: `
     <div class="min-h-screen bg-slate-50 text-slate-900 p-6">
       <header class="max-w-4xl mx-auto mb-6">
@@ -14,6 +15,7 @@ import { GeneratorComponent } from './features/generator/generator.component';
       </header>
 
       <main class="max-w-4xl mx-auto">
+        <app-auth class="mb-6"></app-auth>
         <app-generator></app-generator>
       </main>
     </div>

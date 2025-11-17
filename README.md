@@ -28,3 +28,11 @@ If your GitHub repo is empty, you can run the single command provided by the ass
 - Wire up Supabase keys in `src/environments/env.ts`
 - Add OpenAI / Gemini keys to your backend or edge function
 - Deploy to Vercel / Netlify / Firebase Hosting
+
+
+## Supabase Auth Setup
+
+1. Create a free project at https://supabase.com
+2. In Project Settings -> API, copy the `anon` key and URL and paste into `src/environments/env.ts`.
+3. In Supabase Auth settings enable Email + Password and OAuth providers you want (Google/GitHub). For OAuth, set redirect URL to your app domain (e.g. http://localhost:4200).
+4. Run the app and test signup/signin.

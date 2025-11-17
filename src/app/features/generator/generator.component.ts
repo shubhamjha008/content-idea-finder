@@ -5,7 +5,7 @@ import { GeneratorService } from './generator.service';
 @Component({
   selector: 'app-generator',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   template: `
     <section class="bg-white p-6 rounded-lg shadow">
       <form (submit)="onGenerate($event)" class="space-y-4">
