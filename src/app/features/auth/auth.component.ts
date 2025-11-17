@@ -1,42 +1,21 @@
-
-import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { AuthService, supabase } from './auth.service';
+import { Component } from '@angular/core';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-auth',
-  standalone: true,
-  imports: [FormsModule],
   template: `
-    <div class="bg-white p-6 rounded shadow max-w-md">
-      <h2 class="text-xl font-semibold mb-4">Sign in / Sign up</h2>
-
-      <form (submit)="onSignIn($event)" class="space-y-3">
-        <div>
-          <label class="block text-sm">Email</label>
-          <input [(ngModel)]="email" name="email" class="mt-1 block w-full rounded border px-3 py-2" required />
-        </div>
-        <div>
-          <label class="block text-sm">Password</label>
-          <input [(ngModel)]="password" name="password" type="password" class="mt-1 block w-full rounded border px-3 py-2" required />
-        </div>
-        <div class="flex gap-2">
-          <button class="bg-teal-600 text-white px-4 py-2 rounded" (click)="onSignIn($event)">Sign in</button>
-          <button class="bg-slate-200 px-4 py-2 rounded" (click)="onSignUp($event)">Sign up</button>
-        </div>
-      </form>
-
-      <div class="mt-4">
-        <p class="text-sm text-slate-600 mb-2">Or sign in with</p>
-        <div class="flex gap-2">
-          <button class="px-3 py-2 rounded border" (click)="onOAuth('google')">Google</button>
-          <button class="px-3 py-2 rounded border" (click)="onOAuth('github')">GitHub</button>
-        </div>
+    <div class="bg-white p-4 rounded shadow">
+      <div *ngIf="!user">
+        <form (submit)="signIn($event)" class="flex gap-2 items-end">
+          <input [(ngModel)]="email" name="email" placeholder="email" class="border rounded px-2 py-1" />
+          <input [(ngModel)]="password" name="password" type="password" placeholder="password" class="border rounded px-2 py-1" />
+          <button class="bg-teal-600 text-white px-3 py-1 rounded">Sign In</button>
+          <button class="bg-slate-200 px-3 py-1 rounded" (click)="signUp($event)">Sign Up</button>
+        </form>
       </div>
-
-      <div *ngIf="user" class="mt-4 border-t pt-3">
-        <p class="text-sm">Signed in as: <strong>{{user.email}}</strong></p>
-        <button class="mt-2 bg-red-500 text-white px-3 py-1 rounded" (click)="onSignOut()">Sign out</button>
+      <div *ngIf="user">
+        <p>Signed in as {{user.email}}</p>
+        <button (click)="signOut()" class="bg-red-500 text-white px-3 py-1 rounded">Sign out</button>
       </div>
     </div>
   `
@@ -45,53 +24,39 @@ export class AuthComponent {
   email = '';
   password = '';
   user: any = null;
-  private auth = new AuthService();
+  private svc = new AuthService();
 
   constructor() {
-    // try to load session user
-    supabase.auth.getSession().then(r => {
-      if (r.data?.session?.user) this.user = r.data.session.user;
+    this.svc.getUser().then(r => {
+      this.user = r?.data?.user ?? null;
     });
-    this.auth.onAuthStateChange((event, session) => {
-      if (session?.user) this.user = session.user;
-      else this.user = null;
+    this.svc.onAuthStateChange((event:any, session:any) => {
+      this.user = session?.user ?? null;
     });
   }
 
-  async onSignUp(e: Event) {
+  async signIn(e:any) {
     e.preventDefault();
     try {
-      await this.auth.signUp(this.email, this.password);
-      alert('Sign-up successful. Check your email for confirmation.');
-    } catch (err: any) {
-      alert('Sign-up error: ' + err.message);
-    }
-  }
-
-  async onSignIn(e: Event) {
-    e.preventDefault();
-    try {
-      await this.auth.signIn(this.email, this.password);
+      await this.svc.signIn(this.email, this.password);
       alert('Signed in');
-      const user = await (await this.auth.getUser()).data?.user;
-      this.user = user;
-    } catch (err: any) {
-      alert('Sign-in error: ' + err.message);
+    } catch (err:any) {
+      alert(err.message || err);
     }
   }
 
-  async onOAuth(provider: string) {
+  async signUp(e:any) {
+    e.preventDefault();
     try {
-      await this.auth.signInWithProvider(provider);
-      // OAuth redirects to Supabase hosted page. After auth, user returns to app.
-    } catch (err: any) {
-      alert('OAuth error: ' + err.message);
+      await this.svc.signUp(this.email, this.password);
+      alert('Check your email to confirm sign‑up');
+    } catch (err:any) {
+      alert(err.message || err);
     }
   }
 
-  async onSignOut() {
-    await this.auth.signOut();
+  async signOut() {
+    await this.svc.signOut();
     this.user = null;
-    alert('Signed out');
   }
 }

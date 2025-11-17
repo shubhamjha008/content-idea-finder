@@ -1,8 +1,7 @@
-
 node_modules
 dist
 .env
 .vscode
 .DS_Store
 npm-debug.log
-.vite
+functions/generate/node_modules

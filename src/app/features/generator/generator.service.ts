@@ -1,13 +1,27 @@
-
 export class GeneratorService {
-  async generate(params: {niche:string, platform:string}) {
-    // This is a local stub. Replace with backend API call.
-    await new Promise(r => setTimeout(r, 400));
-    return {
-      ideas: [
-        { title: `Top 5 ${params.niche} tools in 2025`, snippet: 'Short hook + 3 variants' },
-        { title: `How to use ${params.niche} for fast growth`, snippet: 'Short hook + script' }
-      ]
-    };
+  async generate(params:any) {
+    // Calls backend AI generation endpoint defined in environment.aiEndpoint
+    try {
+      const resp = await fetch((globalThis as any).APP_ENV?.aiEndpoint || '/functions/generate/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params),
+      });
+      if (!resp.ok) {
+        const txt = await resp.text();
+        throw new Error('AI endpoint error: ' + txt);
+      }
+      const json = await resp.json();
+      return json;
+    } catch (err) {
+      console.error('GeneratorService.generate error', err);
+      // Fallback: return stubbed ideas
+      return {
+        ideas: [
+          { title: `Top 5 ${params.niche} tools in 2025 (stub)`, snippet: 'Fallback hook + formats' },
+          { title: `${params.niche} growth hacks (stub)`, snippet: 'Fallback script + hook' }
+        ]
+      };
+    }
   }
 }

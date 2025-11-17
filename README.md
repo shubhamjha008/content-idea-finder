@@ -1,38 +1,42 @@
+# Content Idea Finder — Angular 17 + AI Generator
 
-# Content Idea Finder (Angular 17) - Starter
+This bundle adds a serverless AI generator and connects the frontend to it.
 
-This repo contains a lightweight Angular 17 starter scaffold for the Content Idea Finder Micro‑SaaS.
-It uses standalone components, a minimal bootstrap, Tailwind-ready setup, and stubs for Supabase and AI integration.
+## Local setup
 
-## Quick start (local)
+1. Install root deps:
+   ```bash
+   npm install
+   ```
 
-1. Install dependencies
-```bash
-npm install
-```
+2. Install function deps:
+   ```bash
+   cd functions/generate
+   npm install
+   ```
 
-2. Start dev server
-```bash
-npm run dev
-```
+3. Start AI function (separate terminal):
+   ```bash
+   cd functions/generate
+   npm start
+   ```
 
-3. Build for production
-```bash
-npm run build
-```
+4. Run Angular dev server:
+   ```bash
+   npm start
+   ```
+
+5. Set `OPENAI_API_KEY` in your environment before starting the function. Production: configure env vars in your host (Vercel/Netlify).
 
 ## Push to your GitHub repo
-If your GitHub repo is empty, you can run the single command provided by the assistant in the chat to push these files into your repo.
 
-## Next steps provided by the assistant:
-- Wire up Supabase keys in `src/environments/env.ts`
-- Add OpenAI / Gemini keys to your backend or edge function
-- Deploy to Vercel / Netlify / Firebase Hosting
+Unzip this bundle into a local folder and run:
+```bash
+git init
+git remote add origin https://github.com/shubhamjha008/content-idea-finder.git
+git add .
+git commit -m "Add AI generator integration"
+git push -u origin main
+```
 
-
-## Supabase Auth Setup
-
-1. Create a free project at https://supabase.com
-2. In Project Settings -> API, copy the `anon` key and URL and paste into `src/environments/env.ts`.
-3. In Supabase Auth settings enable Email + Password and OAuth providers you want (Google/GitHub). For OAuth, set redirect URL to your app domain (e.g. http://localhost:4200).
-4. Run the app and test signup/signin.
+Do NOT commit any secret keys. Use environment variables.
