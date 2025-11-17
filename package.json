@@ -3,13 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "vite",
-    "build": "tsc && vite build",
-    "dev": "vite"
+    "ng": "ng",
+    "start": "ng serve --open",
+    "build": "ng build",
+    "test": "ng test",
+    "lint": "ng lint"
   },
   "dependencies": {
-    "@angular/core": "^17.0.0",
+    "@angular/animations": "^17.0.0",
     "@angular/common": "^17.0.0",
+    "@angular/compiler": "^17.0.0",
+    "@angular/core": "^17.0.0",
+    "@angular/forms": "^17.0.0",
     "@angular/platform-browser": "^17.0.0",
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
@@ -18,9 +23,9 @@
     "@supabase/supabase-js": "^2.0.0"
   },
   "devDependencies": {
-    "typescript": "~5.2.0",
-    "vite": "^5.0.0",
-    "@vitejs/plugin-angular": "^1.0.0",
+    "@angular/cli": "^17.0.0",
+    "@angular/compiler-cli": "^17.0.0",
+    "typescript": "~5.2.2",
     "tailwindcss": "^4.0.0",
     "postcss": "^8.4.0",
     "autoprefixer": "^10.4.0"
